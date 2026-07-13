@@ -3,9 +3,9 @@
 [![License](https://img.shields.io/badge/License-MIT--SUSHI--WARE--🍣-blue?style=for-the-badge)](https://github.com/mui-z/neko/blob/main/LICENSE)
 [![X](https://img.shields.io/badge/X-@mui__z__-000000?style=for-the-badge&logo=x)](https://x.com/mui_z_)
 
-The simple cli qr code generator.
+A simple CLI QR code generator.
 
-Your can show code on terminal and copy clipboard!
+You can display the QR code in your terminal and copy it to the clipboard!
 
 ## Usage
 
