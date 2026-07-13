@@ -25,7 +25,7 @@ jobs:
       - name: Stash arm64 binary
         run: |
           mkdir -p /tmp/arm64-pkg
-          cp .build/apple/Products/Release/rr /tmp/arm64-pkg/rr
+          cp .build/out/Products/Release/rr /tmp/arm64-pkg/rr
 
       - name: Build x86_64
         run: swift build -c release --arch x86_64
@@ -33,7 +33,7 @@ jobs:
       - name: Stash x86_64 binary
         run: |
           mkdir -p /tmp/x64-pkg
-          cp .build/apple/Products/Release/rr /tmp/x64-pkg/rr
+          cp .build/out/Products/Release/rr /tmp/x64-pkg/rr
 
       - name: Package
         run: |
