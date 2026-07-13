@@ -7,6 +7,9 @@ A simple CLI QR code generator.
 
 You can display the QR code in your terminal and copy it to the clipboard!
 
+<img width="500" height="566" alt="スクリーンショット 2026-07-14 0 30 41" src="https://github.com/user-attachments/assets/8a9002b6-65d4-4b35-9eb7-77e173c3bb9e" />
+
+
 ## Usage
 
 ```bash
@@ -38,6 +41,7 @@ Use high error correction so the QR stays scannable even if partly damaged:
 ```bash
 rr -l H "WIFI:T:WPA;S:MyCafeWiFi;P:secretpass;;"
 ```
+
 
 ### Options
 
