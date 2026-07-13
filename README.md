@@ -10,16 +10,43 @@ Your can show code on terminal and copy clipboard!
 ## Usage
 
 ```bash
-USAGE: rr <text> [--copy] [--level <level>]
-
-ARGUMENTS:
-  <text>                  Text to encode into the QR code.
-
-OPTIONS:
-  -c, --copy              Copy the QR code image to the clipboard.
-  -l, --level <level>     QR Code error correction level (L, M, Q, or H).
-  -h, --help              Show help information.
+rr <text> [--copy] [--level <level>]
 ```
+
+### Examples
+
+Open a URL on your phone:
+
+```bash
+rr https://github.com/mui-z/rr
+```
+
+Share WiFi credentials:
+
+```bash
+rr "WIFI:T:WPA;S:MyCafeWiFi;P:secretpass;;"
+```
+
+Copy the QR image to clipboard for sharing in chat apps:
+
+```bash
+rr -c https://github.com/mui-z/rr
+```
+
+Use high error correction so the QR stays scannable even if partly damaged:
+
+```bash
+rr -l H "WIFI:T:WPA;S:MyCafeWiFi;P:secretpass;;"
+```
+
+### Options
+
+| Option | Description |
+| --- | --- |
+| `<text>` | Text to encode into the QR code. |
+| `-c`, `--copy` | Copy the QR code image to the clipboard. |
+| `-l`, `--level <level>` | QR Code error correction level (L, M, Q, or H). Default: M. |
+| `-h`, `--help` | Show help information. |
 
 ## Installation
 
