@@ -24,5 +24,5 @@ OPTIONS:
 ## Installation
 
 ```bash
-mint install mui-z/rr
+mise use -g github:mui-z/rr
 ```

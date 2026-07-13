@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select latest Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Build arm64
+        run: swift build -c release --arch arm64
+
+      - name: Stash arm64 binary
+        run: |
+          mkdir -p /tmp/arm64-pkg
+          cp .build/apple/Products/Release/rr /tmp/arm64-pkg/rr
+
+      - name: Build x86_64
+        run: swift build -c release --arch x86_64
+
+      - name: Stash x86_64 binary
+        run: |
+          mkdir -p /tmp/x64-pkg
+          cp .build/apple/Products/Release/rr /tmp/x64-pkg/rr
+
+      - name: Package
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          tar czf rr-${VERSION}-macos-arm64.tar.gz -C /tmp/arm64-pkg rr
+          tar czf rr-${VERSION}-macos-x86_64.tar.gz -C /tmp/x64-pkg rr
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: rr-*-macos-*.tar.gz
+          generate_release_notes: true
