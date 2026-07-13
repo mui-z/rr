@@ -20,20 +20,20 @@ jobs:
           xcode-version: "26.6"
 
       - name: Build arm64
-        run: swift build -c release --arch arm64
-
-      - name: Stash arm64 binary
         run: |
+          BUILD_ARGS="-c release --arch arm64"
+          swift build $BUILD_ARGS
+          BIN_PATH=$(swift build $BUILD_ARGS --show-bin-path)
           mkdir -p /tmp/arm64-pkg
-          cp .build/out/Products/Release/rr /tmp/arm64-pkg/rr
+          cp "$BIN_PATH/rr" /tmp/arm64-pkg/rr
 
       - name: Build x86_64
-        run: swift build -c release --arch x86_64
-
-      - name: Stash x86_64 binary
         run: |
+          BUILD_ARGS="-c release --arch x86_64"
+          swift build $BUILD_ARGS
+          BIN_PATH=$(swift build $BUILD_ARGS --show-bin-path)
           mkdir -p /tmp/x64-pkg
-          cp .build/out/Products/Release/rr /tmp/x64-pkg/rr
+          cp "$BIN_PATH/rr" /tmp/x64-pkg/rr
 
       - name: Package
         run: |
