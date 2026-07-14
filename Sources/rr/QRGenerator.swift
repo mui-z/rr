@@ -2,6 +2,7 @@ import AppKit
 import ArgumentParser
 import CoreImage
 import CoreImage.CIFilterBuiltins
+import CoreText
 
 enum CorrectionLevel: String, ExpressibleByArgument, CaseIterable {
     case L, M, Q, H
@@ -43,15 +44,19 @@ func createScaledImageForClipboard(from ciImage: CIImage, maxDimension: CGFloat 
 
     let qrWidth = qrCGImage.width
     let qrHeight = qrCGImage.height
+    let backingScale = NSScreen.main?.backingScaleFactor ?? 2.0
     let fontSize = max(CGFloat(qrWidth) / 20.0, 14.0)
     let titleHeight = fontSize * 2.5
     let totalHeight = CGFloat(qrHeight) + titleHeight
 
+    let scaledWidth = Int(CGFloat(qrWidth) * backingScale)
+    let scaledTotalHeight = Int(totalHeight * backingScale)
+
     let colorSpace = CGColorSpaceCreateDeviceRGB()
     guard let bitmapContext = CGContext(
         data: nil,
-        width: qrWidth,
-        height: Int(totalHeight),
+        width: scaledWidth,
+        height: scaledTotalHeight,
         bitsPerComponent: 8,
         bytesPerRow: 0,
         space: colorSpace,
@@ -59,6 +64,8 @@ func createScaledImageForClipboard(from ciImage: CIImage, maxDimension: CGFloat 
     ) else {
         return qrCGImage
     }
+
+    bitmapContext.scaleBy(x: backingScale, y: backingScale)
 
     bitmapContext.setFillColor(NSColor.white.cgColor)
     bitmapContext.fill(CGRect(x: 0, y: 0, width: qrWidth, height: Int(totalHeight)))
@@ -72,29 +79,18 @@ func createScaledImageForClipboard(from ciImage: CIImage, maxDimension: CGFloat 
         .font: NSFont.systemFont(ofSize: fontSize, weight: .bold),
         .foregroundColor: NSColor.black,
         .paragraphStyle: paragraphStyle,
-        .backgroundColor: NSColor.white,
     ]
 
-    let textRect = CGRect(
-        x: 0,
-        y: CGFloat(qrHeight),
-        width: CGFloat(qrWidth),
-        height: titleHeight
-    )
+    let attrString = NSAttributedString(string: title, attributes: attributes)
+    let line = CTLineCreateWithAttributedString(attrString)
+    let lineWidth = CTLineGetTypographicBounds(line, nil, nil, nil)
+    let x = (CGFloat(qrWidth) - lineWidth) / 2
+    let y = CGFloat(qrHeight) + (titleHeight - fontSize) / 2
 
-    let nsImage = NSImage(cgImage: bitmapContext.makeImage()!, size: NSSize(width: CGFloat(qrWidth), height: totalHeight))
-    nsImage.lockFocus()
-    (title as NSString).draw(in: textRect, withAttributes: attributes)
-    nsImage.unlockFocus()
+    bitmapContext.textPosition = CGPoint(x: x, y: y)
+    CTLineDraw(line, bitmapContext)
 
-    guard let tiffData = nsImage.tiffRepresentation,
-          let bitmapRep = NSBitmapImageRep(data: tiffData),
-          let finalCGImage = bitmapRep.cgImage
-    else {
-        return qrCGImage
-    }
-
-    return finalCGImage
+    return bitmapContext.makeImage() ?? qrCGImage
 }
 
 func copyToPastedboard(_ cgImage: CGImage) {
