@@ -24,25 +24,45 @@ jobs:
           BUILD_ARGS="-c release --arch arm64"
           swift build $BUILD_ARGS
           BIN_PATH=$(swift build $BUILD_ARGS --show-bin-path)
-          mkdir -p /tmp/arm64-pkg
-          cp "$BIN_PATH/rr" /tmp/arm64-pkg/rr
+          mkdir -p /tmp/rr.artifactbundle/rr-macos-arm64/bin
+          cp "$BIN_PATH/rr" /tmp/rr.artifactbundle/rr-macos-arm64/bin/rr
 
       - name: Build x86_64
         run: |
           BUILD_ARGS="-c release --arch x86_64"
           swift build $BUILD_ARGS
           BIN_PATH=$(swift build $BUILD_ARGS --show-bin-path)
-          mkdir -p /tmp/x64-pkg
-          cp "$BIN_PATH/rr" /tmp/x64-pkg/rr
+          mkdir -p /tmp/rr.artifactbundle/rr-macos-x86_64/bin
+          cp "$BIN_PATH/rr" /tmp/rr.artifactbundle/rr-macos-x86_64/bin/rr
 
-      - name: Package
+      - name: Create artifact bundle
         run: |
           VERSION=${GITHUB_REF_NAME#v}
-          tar czf rr-${VERSION}-macos-arm64.tar.gz -C /tmp/arm64-pkg rr
-          tar czf rr-${VERSION}-macos-x86_64.tar.gz -C /tmp/x64-pkg rr
+          cat > /tmp/rr.artifactbundle/info.json <<EOF
+          {
+            "schemaVersion": "1.0",
+            "artifacts": {
+              "rr": {
+                "type": "executable",
+                "version": "${VERSION}",
+                "variants": [
+                  {
+                    "path": "rr-macos-arm64/bin/rr",
+                    "supportedTriples": ["arm64-apple-macosx"]
+                  },
+                  {
+                    "path": "rr-macos-x86_64/bin/rr",
+                    "supportedTriples": ["x86_64-apple-macosx"]
+                  }
+                ]
+              }
+            }
+          }
+          EOF
+          cd /tmp && zip -r rr.artifactbundle.zip rr.artifactbundle
 
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
-          files: rr-*-macos-*.tar.gz
+          files: /tmp/rr.artifactbundle.zip
           generate_release_notes: true
