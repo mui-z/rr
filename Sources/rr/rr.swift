@@ -22,6 +22,10 @@ struct RR: ParsableCommand {
     var title: String? = nil
 
     mutating func run() throws {
+        guard size > 0 else {
+            throw ValidationError("--size must be a positive integer.")
+        }
+
         guard let ciImage = generateQRCode(from: text, correctionLevel: level)
         else {
             throw ValidationError("Failed to generate QR code.")
@@ -32,9 +36,11 @@ struct RR: ParsableCommand {
         }
 
         if copy {
-            let cgImage = createScaledImageForClipboard(from: ciImage, maxDimension: CGFloat(size), title: title)
-            copyToPastedboard(cgImage)
-            print("Copied your clipboard!")
+            guard let cgImage = createScaledImageForClipboard(from: ciImage, maxDimension: CGFloat(size), title: title) else {
+                throw ValidationError("Failed to create clipboard image.")
+            }
+            copyToPasteboard(cgImage)
+            print("Copied to clipboard!")
         }
     }
 }

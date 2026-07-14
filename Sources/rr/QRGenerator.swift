@@ -17,13 +17,7 @@ func generateQRCode(from string: String, correctionLevel: CorrectionLevel?) -> C
     return filter.outputImage
 }
 
-func createScaledImage(from ciImage: CIImage, scale: CGFloat, context: CIContext = CIContext()) -> CGImage? {
-    let scaledImage = ciImage.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
-
-    return context.createCGImage(scaledImage, from: scaledImage.extent)
-}
-
-func createScaledImageForClipboard(from ciImage: CIImage, maxDimension: CGFloat = 400, title: String? = nil, context: CIContext = CIContext()) -> CGImage {
+func createScaledImageForClipboard(from ciImage: CIImage, maxDimension: CGFloat = 400, title: String? = nil, context: CIContext = CIContext()) -> CGImage? {
     let originalWidth = ciImage.extent.width
     let originalHeight = ciImage.extent.height
     let maxOriginalDimension = max(originalWidth, originalHeight)
@@ -36,7 +30,9 @@ func createScaledImageForClipboard(from ciImage: CIImage, maxDimension: CGFloat 
     }
 
     let scaledImage = ciImage.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
-    let qrCGImage = context.createCGImage(scaledImage, from: scaledImage.extent)!
+    guard let qrCGImage = context.createCGImage(scaledImage, from: scaledImage.extent) else {
+        return nil
+    }
 
     guard let title else {
         return qrCGImage
@@ -68,7 +64,7 @@ func createScaledImageForClipboard(from ciImage: CIImage, maxDimension: CGFloat 
     bitmapContext.scaleBy(x: backingScale, y: backingScale)
 
     bitmapContext.setFillColor(NSColor.white.cgColor)
-    bitmapContext.fill(CGRect(x: 0, y: 0, width: qrWidth, height: Int(totalHeight)))
+    bitmapContext.fill(CGRect(x: 0, y: 0, width: CGFloat(qrWidth), height: totalHeight))
 
     bitmapContext.draw(qrCGImage, in: CGRect(x: 0, y: 0, width: qrWidth, height: qrHeight))
 
@@ -93,7 +89,7 @@ func createScaledImageForClipboard(from ciImage: CIImage, maxDimension: CGFloat 
     return bitmapContext.makeImage() ?? qrCGImage
 }
 
-func copyToPastedboard(_ cgImage: CGImage) {
+func copyToPasteboard(_ cgImage: CGImage) {
     let image = NSImage(cgImage: cgImage, size: .zero)
 
     let pasteboard = NSPasteboard.general
@@ -128,13 +124,14 @@ func printQRCode(_ ciImage: CIImage) {
     context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
 
     for y in 0 ..< height {
-        var line = ""
+        var chars: [String] = []
+        chars.reserveCapacity(width * 2)
 
         for x in 0 ..< width {
             let value = pixels[y * width + x]
-            line += value < 128 ? "██" : "  "
+            chars.append(value < 128 ? "██" : "  ")
         }
 
-        print(line)
+        print(chars.joined())
     }
 }
