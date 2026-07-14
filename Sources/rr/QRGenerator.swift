@@ -22,11 +22,10 @@ func createScaledImageForClipboard(from ciImage: CIImage, maxDimension: CGFloat 
     let originalHeight = ciImage.extent.height
     let maxOriginalDimension = max(originalWidth, originalHeight)
 
-    let scale: CGFloat
-    if maxOriginalDimension * 10.0 > maxDimension {
-        scale = maxDimension / maxOriginalDimension
+    let scale: CGFloat = if maxOriginalDimension * 10.0 > maxDimension {
+        maxDimension / maxOriginalDimension
     } else {
-        scale = 10.0
+        10.0
     }
 
     let scaledImage = ciImage.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
@@ -56,7 +55,7 @@ func createScaledImageForClipboard(from ciImage: CIImage, maxDimension: CGFloat 
         bitsPerComponent: 8,
         bytesPerRow: 0,
         space: colorSpace,
-        bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+        bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue,
     ) else {
         return qrCGImage
     }
@@ -110,7 +109,7 @@ func printQRCode(_ ciImage: CIImage) {
         bitsPerComponent: 8,
         bytesPerRow: width,
         space: CGColorSpaceCreateDeviceGray(),
-        bitmapInfo: CGImageAlphaInfo.none.rawValue
+        bitmapInfo: CGImageAlphaInfo.none.rawValue,
     ) else {
         return
     }

@@ -22,14 +22,14 @@ let package = Package(
             ],
             swiftSettings: [
                 .enableUpcomingFeature("ApproachableConcurrency"),
-            ]
+            ],
         ),
         .testTarget(
             name: "rrTests",
             dependencies: ["rr"],
             swiftSettings: [
                 .enableUpcomingFeature("ApproachableConcurrency"),
-            ]
+            ],
         ),
-    ]
+    ],
 )
