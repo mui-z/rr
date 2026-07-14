@@ -13,7 +13,7 @@ You can display the QR code in your terminal and copy it to the clipboard!
 ## Usage
 
 ```bash
-rr <text> [--copy] [--level <level>]
+rr <text> [--copy] [--quiet] [--size <size>] [--title <title>] [--level <level>]
 ```
 
 ### Examples
@@ -49,11 +49,14 @@ rr -l H "WIFI:T:WPA;S:MyCafeWiFi;P:secretpass;;"
 | --- | --- |
 | `<text>` | Text to encode into the QR code. |
 | `-c`, `--copy` | Copy the QR code image to the clipboard. |
+| `-q`, `--quiet` | Suppress QR code display in terminal. |
+| `-s`, `--size <size>` | Max clipboard image dimension in pixels. Default: 400. |
+| `-t`, `--title <title>` | Title text to overlay on the QR code image. |
 | `-l`, `--level <level>` | QR Code error correction level (L, M, Q, or H). Default: M. |
 | `-h`, `--help` | Show help information. |
 
 ## Installation
 
 ```bash
-mise use -g github:mui-z/rr
+mise use -g spm:mui-z/rr
 ```
