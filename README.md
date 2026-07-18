@@ -21,18 +21,13 @@ rr <text> [--copy] [--quiet] [--size <size>] [--title <title>] [--level <level>]
 ### Homebrew
 
 ```bash
+# Homebrew
 brew install mui-z/tap/rr
-```
 
-### Mint
-
-```bash
+# Mint
 mint install mui-z/rr
-```
 
-### mise
-
-```bash
+# mise
 mise use -g spm:mui-z/rr
 ```
 
