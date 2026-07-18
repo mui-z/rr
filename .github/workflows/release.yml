@@ -78,28 +78,28 @@ jobs:
           cd /tmp/homebrew-tap
 
           cat > rr.rb <<EOF
-class Rr < Formula
-  desc "A simple CLI QR code generator"
-  homepage "https://github.com/mui-z/rr"
-  version "${VERSION}"
-  license "MIT"
+          class Rr < Formula
+            desc "A simple CLI QR code generator"
+            homepage "https://github.com/mui-z/rr"
+            version "${VERSION}"
+            license "MIT"
 
-  url "https://github.com/mui-z/rr/releases/download/v#{version}/rr.artifactbundle.zip"
-  sha256 "${SHA256}"
+            url "https://github.com/mui-z/rr/releases/download/v#{version}/rr.artifactbundle.zip"
+            sha256 "${SHA256}"
 
-  def install
-    if Hardware::CPU.arm?
-      bin.install "rr.artifactbundle/rr-macos-arm64/bin/rr"
-    else
-      bin.install "rr.artifactbundle/rr-macos-x86_64/bin/rr"
-    end
-  end
+            def install
+              if Hardware::CPU.arm?
+                bin.install "rr.artifactbundle/rr-macos-arm64/bin/rr"
+              else
+                bin.install "rr.artifactbundle/rr-macos-x86_64/bin/rr"
+              end
+            end
 
-  test do
-    system "#{bin}/rr", "--help"
-  end
-end
-EOF
+            test do
+              system "#{bin}/rr", "--help"
+            end
+          end
+          EOF
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
