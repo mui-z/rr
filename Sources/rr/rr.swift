@@ -21,7 +21,7 @@ struct RR: ParsableCommand {
     @Option(name: .shortAndLong, help: "Title text to overlay on the QR code image.")
     var title: String? = nil
 
-    @Option(name: .shortAndLong, help: "Output file path for the QR code image.")
+    @Option(name: .shortAndLong, help: "Output file path for the QR code image.", completion: .file(extensions: ["png", "jpg", "jpeg", "tiff", "tif", "bmp", "gif"]))
     var output: String? = nil
 
     mutating func run() throws {
