@@ -3,6 +3,8 @@ import ArgumentParser
 import CoreImage
 import CoreImage.CIFilterBuiltins
 import CoreText
+import ImageIO
+import UniformTypeIdentifiers
 
 enum CorrectionLevel: String, ExpressibleByArgument, CaseIterable {
     case L, M, Q, H
@@ -132,5 +134,39 @@ func printQRCode(_ ciImage: CIImage) {
         }
 
         print(chars.joined())
+    }
+}
+
+func saveQRCodeToFile(_ ciImage: CIImage, path: String, maxDimension: CGFloat = 400, title: String? = nil) throws {
+    guard let cgImage = createScaledImageForClipboard(from: ciImage, maxDimension: maxDimension, title: title) else {
+        throw ValidationError("Failed to create QR code image.")
+    }
+
+    let url = URL(fileURLWithPath: path)
+    let pathExtension = url.pathExtension.lowercased()
+
+    let utType: UTType = switch pathExtension {
+    case "png":
+        .png
+    case "jpg", "jpeg":
+        .jpeg
+    case "tiff", "tif":
+        .tiff
+    case "bmp":
+        .bmp
+    case "gif":
+        .gif
+    default:
+        .png
+    }
+
+    guard let destination = CGImageDestinationCreateWithURL(url as CFURL, utType.identifier as CFString, 1, nil) else {
+        throw ValidationError("Failed to create image destination for path: \(path)")
+    }
+
+    CGImageDestinationAddImage(destination, cgImage, nil)
+
+    guard CGImageDestinationFinalize(destination) else {
+        throw ValidationError("Failed to save image to path: \(path)")
     }
 }

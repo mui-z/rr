@@ -21,6 +21,9 @@ struct RR: ParsableCommand {
     @Option(name: .shortAndLong, help: "Title text to overlay on the QR code image.")
     var title: String? = nil
 
+    @Option(name: .shortAndLong, help: "Output file path for the QR code image.")
+    var output: String? = nil
+
     mutating func run() throws {
         guard size > 0 else {
             throw ValidationError("--size must be a positive integer.")
@@ -41,6 +44,11 @@ struct RR: ParsableCommand {
             }
             copyToPasteboard(cgImage)
             print("Copied to clipboard!")
+        }
+
+        if let outputPath = output {
+            try saveQRCodeToFile(ciImage, path: outputPath, maxDimension: CGFloat(size), title: title)
+            print("Saved to \(outputPath)")
         }
     }
 }

@@ -13,7 +13,7 @@ You can display the QR code in your terminal and copy it to the clipboard!
 ## Usage
 
 ```bash
-rr <text> [--copy] [--quiet] [--size <size>] [--title <title>] [--level <level>]
+rr <text> [--copy] [--quiet] [--size <size>] [--title <title>] [--level <level>] [--output <output>]
 ```
 
 ### Examples
@@ -42,6 +42,12 @@ Use high error correction so the QR stays scannable even if partly damaged:
 rr -l H "WIFI:T:WPA;S:MyCafeWiFi;P:secretpass;;"
 ```
 
+Save the QR code image to a file:
+
+```bash
+rr -o qr.png https://github.com/mui-z/rr
+```
+
 
 ### Options
 
@@ -53,6 +59,7 @@ rr -l H "WIFI:T:WPA;S:MyCafeWiFi;P:secretpass;;"
 | `-s`, `--size <size>` | Max clipboard image dimension in pixels. Default: 400. |
 | `-t`, `--title <title>` | Title text to overlay on the QR code image. |
 | `-l`, `--level <level>` | QR Code error correction level (L, M, Q, or H). Default: M. |
+| `-o`, `--output <output>` | Output file path for the QR code image. Supported formats: PNG, JPEG, TIFF, BMP, GIF. |
 | `-h`, `--help` | Show help information. |
 
 ## Installation
