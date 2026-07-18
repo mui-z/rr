@@ -66,3 +66,43 @@ jobs:
         with:
           files: /tmp/rr.artifactbundle.zip
           generate_release_notes: true
+
+      - name: Update homebrew-tap
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          SHA256=$(shasum -a 256 /tmp/rr.artifactbundle.zip | cut -d ' ' -f 1)
+
+          git clone https://x-access-token:${GH_PAT}@github.com/mui-z/homebrew-tap.git /tmp/homebrew-tap
+          cd /tmp/homebrew-tap
+
+          cat > rr.rb <<EOF
+class Rr < Formula
+  desc "A simple CLI QR code generator"
+  homepage "https://github.com/mui-z/rr"
+  version "${VERSION}"
+  license "MIT"
+
+  url "https://github.com/mui-z/rr/releases/download/v#{version}/rr.artifactbundle.zip"
+  sha256 "${SHA256}"
+
+  def install
+    if Hardware::CPU.arm?
+      bin.install "rr.artifactbundle/rr-macos-arm64/bin/rr"
+    else
+      bin.install "rr.artifactbundle/rr-macos-x86_64/bin/rr"
+    end
+  end
+
+  test do
+    system "#{bin}/rr", "--help"
+  end
+end
+EOF
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add rr.rb
+          git commit -m "Update rr to v${VERSION}"
+          git push

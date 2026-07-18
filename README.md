@@ -16,6 +16,26 @@ You can display the QR code in your terminal and copy it to the clipboard!
 rr <text> [--copy] [--quiet] [--size <size>] [--title <title>] [--level <level>] [--output <output>]
 ```
 
+## Installation
+
+### Homebrew
+
+```bash
+brew install mui-z/tap/rr
+```
+
+### Mint
+
+```bash
+mint install mui-z/rr
+```
+
+### mise
+
+```bash
+mise use -g spm:mui-z/rr
+```
+
 ### Examples
 
 Open a URL on your phone:
@@ -62,8 +82,4 @@ rr -o qr.png https://github.com/mui-z/rr
 | `-o`, `--output <output>` | Output file path for the QR code image. Supported formats: PNG, JPEG, TIFF, BMP, GIF. |
 | `-h`, `--help` | Show help information. |
 
-## Installation
 
-```bash
-mise use -g spm:mui-z/rr
-```
