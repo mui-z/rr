@@ -70,7 +70,7 @@ rr -o qr.png https://github.com/mui-z/rr
 | `<text>` | Text to encode into the QR code. |
 | `-c`, `--copy` | Copy the QR code image to the clipboard. |
 | `-q`, `--quiet` | Suppress QR code display in terminal. |
-| `-s`, `--size <size>` | Max clipboard image dimension in pixels. Default: 400. |
+| `-s`, `--size <size>` | Max clipboard and output image dimension in pixels. Default: 400. |
 | `-t`, `--title <title>` | Title text to overlay on the QR code image. |
 | `-l`, `--level <level>` | QR Code error correction level (L, M, Q, or H). Default: M. |
 | `-o`, `--output <output>` | Output file path for the QR code image. Supported formats: PNG, JPEG, TIFF, BMP, GIF. |

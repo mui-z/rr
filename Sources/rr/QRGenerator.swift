@@ -19,7 +19,7 @@ func generateQRCode(from string: String, correctionLevel: CorrectionLevel?) -> C
     return filter.outputImage
 }
 
-func createScaledImageForClipboard(from ciImage: CIImage, maxDimension: CGFloat = 400, title: String? = nil, context: CIContext = CIContext()) -> CGImage? {
+func createScaledImage(from ciImage: CIImage, maxDimension: CGFloat = 400, title: String? = nil, context: CIContext = CIContext()) -> CGImage? {
     let originalWidth = ciImage.extent.width
     let originalHeight = ciImage.extent.height
     let maxOriginalDimension = max(originalWidth, originalHeight)

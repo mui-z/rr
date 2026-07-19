@@ -39,7 +39,7 @@ struct RR: ParsableCommand {
         }
 
         if copy {
-            guard let cgImage = createScaledImageForClipboard(from: ciImage, maxDimension: CGFloat(size), title: title) else {
+            guard let cgImage = createScaledImage(from: ciImage, maxDimension: CGFloat(size), title: title) else {
                 throw ValidationError("Failed to create clipboard image.")
             }
             copyToPasteboard(cgImage)
