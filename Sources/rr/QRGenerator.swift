@@ -138,7 +138,7 @@ func printQRCode(_ ciImage: CIImage) {
 }
 
 func saveQRCodeToFile(_ ciImage: CIImage, path: String, maxDimension: CGFloat = 400, title: String? = nil) throws {
-    guard let cgImage = createScaledImageForClipboard(from: ciImage, maxDimension: maxDimension, title: title) else {
+    guard let cgImage = createScaledImage(from: ciImage, maxDimension: maxDimension, title: title) else {
         throw ValidationError("Failed to create QR code image.")
     }
 
