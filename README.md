@@ -30,7 +30,7 @@ mint install mui-z/rr
 mise use -g spm:mui-z/rr
 ```
 
-### Examples
+## Examples
 
 Open a URL on your phone:
 
@@ -63,7 +63,7 @@ rr -o qr.png https://github.com/mui-z/rr
 ```
 
 
-### Options
+## Options
 
 | Option | Description |
 | --- | --- |
