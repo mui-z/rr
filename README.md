@@ -76,4 +76,19 @@ rr -o qr.png https://github.com/mui-z/rr
 | `-o`, `--output <output>` | Output file path for the QR code image. Supported formats: PNG, JPEG, TIFF, BMP, GIF. |
 | `-h`, `--help` | Show help information. |
 
+## Shell Completion
+
+Supports bash, zsh, and fish.
+
+```bash
+# zsh
+rr --generate-completion-script zsh > /usr/local/share/zsh/site-functions/_rr
+
+# bash
+rr --generate-completion-script bash > /etc/bash_completion.d/rr
+
+# fish
+rr --generate-completion-script fish > ~/.config/fish/completions/rr.fish
+```
+
 
